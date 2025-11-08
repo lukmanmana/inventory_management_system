@@ -59,6 +59,12 @@ This is a small inventory management web application written in plain PHP with T
 - Stock alert center (low stock indicators)
 - CSV export (client-side and premium/full server export)
 - Profile and subscription controls
+## Design
+<img width="1897" height="904" alt="image" src="https://github.com/user-attachments/assets/b1fcfa15-68b2-4a36-aaad-46c97cb44a1c" />
+<img width="1898" height="903" alt="image" src="https://github.com/user-attachments/assets/3940e33d-5a2a-458a-ad62-708eecd1eb73" />
+<img width="1900" height="903" alt="image" src="https://github.com/user-attachments/assets/f6264c5d-7f07-478a-9616-21d4b39edafe" />
+<img width="1903" height="905" alt="image" src="https://github.com/user-attachments/assets/d18f6f30-60f2-4a6d-bd6f-8c97190f7fb1" />
 
 
 ---
+
