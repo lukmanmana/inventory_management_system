@@ -1,8 +1,8 @@
 -- Cleaned minimal schema for Inventory Management System
 -- Use this file to (re-)create the database schema.
 
-CREATE DATABASE IF NOT EXISTS inventory_management;
-USE inventory_management;
+CREATE DATABASE IF NOT EXISTS dramranc_stockmaster;
+USE dramranc_stockmaster;
 
 SET FOREIGN_KEY_CHECKS = 0;
 

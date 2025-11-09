@@ -1,9 +1,9 @@
 <?php
 function connectDB() {
     $host = 'localhost';
-    $username = 'root';
-    $password = '';
-    $database = 'inventory_management';
+    $username = 'dramranc_stockmaster';
+    $password = 'wxyE#cCJghPn';
+    $database = 'dramranc_stockmaster';
 
     try {
         $conn = new mysqli($host, $username, $password, $database);

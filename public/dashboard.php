@@ -4,6 +4,7 @@ require_once __DIR__ . '/../backend/services/AuthManager.php';
 require_once __DIR__ . '/../backend/services/ProductManager.php';
 require_once __DIR__ . '/../backend/services/SubscriptionManager.php';
 require_once __DIR__ . '/../backend/services/CategoryManager.php';
+require_once __DIR__ . '/../backend/services/ContactManager.php';
 
 $auth = new AuthManager();
 if (!$auth->isLoggedIn()) {
@@ -73,6 +74,10 @@ $user['subscription_type'] = $subscriptionDetails['plan_type'] ?? $user['subscri
                         <button onclick="showStockAlert()" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-150 flex items-center space-x-2">
                             <i class="fas fa-bell"></i>
                             <span>Alerts</span>
+                        </button>
+                        <button onclick="contactUs()" class="text-gray-600 hover:text-purple-600 font-medium transition-colors duration-150 flex items-center space-x-2">
+                            <i class="fas fa-envelope"></i>
+                            <span>Contact Us</span>
                         </button>
                     </div>
                 </div>
@@ -743,6 +748,7 @@ $user['subscription_type'] = $subscriptionDetails['plan_type'] ?? $user['subscri
             </div>
         </div>
     </div>
+
 
     <script>
         // Dashboard reload function
@@ -1570,7 +1576,103 @@ $user['subscription_type'] = $subscriptionDetails['plan_type'] ?? $user['subscri
                 alert('An error occurred while saving profile');
             });
         }
+
+        // Contact Us
+        function contactUs() {
+            const modal = document.getElementById('contactUsModal');
+            const nameInput = document.getElementById('cu_name');
+            const emailInput = document.getElementById('cu_email');
+
+            fetch('../backend/controllers/profile.php')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const user = data.data;
+                        nameInput.value = user.name || '';
+                        emailInput.value = user.email || '';
+                    }
+                    modal.classList.remove('hidden');
+                })
+                .catch(err => {
+                    console.error('Failed to load user info:', err);
+                    modal.classList.remove('hidden');
+                });
+        }
+
+        function closeContactUs() {
+            document.getElementById('contactUsModal').classList.add('hidden');
+        }
+
+        function sendContactUsMessage() {
+            const name = document.getElementById('cu_name').value.trim();
+            const email = document.getElementById('cu_email').value.trim();
+            const message = document.getElementById('cu_message').value.trim();
+
+            if (!name || !email || !message) {
+                alert('Please fill in all fields before sending.');
+                return;
+            }
+
+            fetch('../backend/controllers/contact.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Your message has been sent successfully.');
+                        closeContactUs();
+                    } else {
+                        alert('Failed to send message. Please try again.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error sending message:', err);
+                    alert('An error occurred while sending your message.');
+                });
+        }
     </script>
+    <!-- Contact Us Modal -->
+    <div id="contactUsModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="glass-effect rounded-xl shadow-2xl w-full max-w-md transform transition-all" data-aos="zoom-in">
+                <div class="bg-white rounded-t-xl px-6 py-4 flex items-center justify-between border-b border-gray-100">
+                    <h3 class="text-gray-900 font-bold">Contact Us</h3>
+                    <button onclick="closeContactUs()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <p class="text-sm text-gray-600 mb-4">
+                        Got a question, issue, or suggestion? Reach out to us using the form below.
+                    </p>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input id="cu_name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Your name" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input id="cu_email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="you@example.com" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                        <textarea id="cu_message" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Write your message here..."></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closeContactUs()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button onclick="sendContactUsMessage()" class="px-4 py-2 rounded-md text-white bg-gradient-to-r from-purple-600 to-purple-700">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Stock Alert Modal -->
     <div id="stockAlertModal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black bg-opacity-50"></div>
